@@ -83,3 +83,53 @@ func Test_ValidateOutput(t *testing.T) {
 		}
 	}
 }
+
+func Benchmark_ValidateOutput(b *testing.B) {
+	dir := "D:/GameDevelop/Trash/Go/OzonContestTests/Task_1/"
+	entries, err := os.ReadDir(dir)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	var in *os.File
+	var exp string
+
+	for _, e := range entries {
+		if strings.Contains(e.Name(), ".test.") {
+			continue
+		}
+
+		if strings.Contains(e.Name(), ".a") {
+			f, _ := os.ReadFile(dir + e.Name())
+			exp = string(f)
+		} else {
+			in, _ = os.Open(dir + e.Name())
+		}
+
+		if in != nil && string(exp) != "" {
+
+			oldR, oldW := os.Stdin, os.Stdout
+
+			out2, err := os.CreateTemp(dir, e.Name()+".test.")
+			if err != nil {
+				return
+			}
+			os.Stdin = in
+			os.Stdout = out2
+
+			b.ResetTimer()
+			main()
+			b.StopTimer()
+
+			in.Close()
+			in = nil
+			out2.Close()
+			os.Remove(out2.Name())
+
+			out2.Seek(0, io.SeekStart)
+			out2.Close()
+
+			os.Stdin, os.Stdout = oldR, oldW
+		}
+	}
+}
