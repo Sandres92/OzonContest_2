@@ -10,7 +10,7 @@ import (
 )
 
 func Test_ValidateOutput(t *testing.T) {
-	dir := "D:/GameDevelop/Trash/Go/OzonContestTests/Task_1/"
+	dir := "D:/GameDevelop/Trash/Go/OzonContestTests/validate-result/"
 	entries, err := os.ReadDir(dir)
 	if err != nil {
 		log.Fatal(err)
@@ -71,6 +71,7 @@ func Test_ValidateOutput(t *testing.T) {
 				if es[i] != gs[i] {
 					t.Errorf("f_______________________________________failed %s on %d\nexp, got:\n%s\n__________________________\n%s", e.Name(), i, es[i], gs[i])
 					isEquals = false
+					break
 				}
 			}
 
@@ -85,7 +86,7 @@ func Test_ValidateOutput(t *testing.T) {
 }
 
 func Benchmark_ValidateOutput(b *testing.B) {
-	dir := "D:/GameDevelop/Trash/Go/OzonContestTests/Task_1/"
+	dir := "D:/GameDevelop/Trash/Go/OzonContestTests/validate-result/"
 	entries, err := os.ReadDir(dir)
 	if err != nil {
 		log.Fatal(err)
